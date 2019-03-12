@@ -1,0 +1,87 @@
+Radix sort is a small method that many people intuitively use when alphabetizing a large list of names. Specifically, the list of names is first sorted according to the first letter of each name, that is, the names are arranged in 26 classes.
+
+Intuitively, one might want to sort numbers on their most significant digit. However, Radix sort works counter-intuitively by sorting on the least significant digits first. On the first pass, all the numbers are sorted on the least significant digit and combined in an array. Then on the second pass, the entire numbers are sorted again on the second least significant digits and combined in an array and so on.
+
+Algorithm: Radix-Sort (list, n) 
+shift = 1 
+for loop = 1 to keysize do 
+   for entry = 1 to n do 
+      bucketnumber = (list[entry].key / shift) mod 10 
+      append (bucket[bucketnumber], list[entry]) 
+   list = combinebuckets() 
+   shift = shift * 10 
+Analysis
+Each key is looked at once for each digit (or letter if the keys are alphabetic) of the longest key. Hence, if the longest key has m digits and there are n keys, radix sort has order O(m.n).
+
+However, if we look at these two values, the size of the keys will be relatively small when compared to the number of keys. For example, if we have six-digit keys, we could have a million different records.
+
+Here, we see that the size of the keys is not significant, and this algorithm is of linear complexity O(n).
+
+Example
+Following example shows how Radix sort operates on seven 3-digits number.
+
+Input	1st Pass	2nd Pass	3rd Pass
+329	720	720	329
+457	355	329	355
+657	436	436	436
+839	457	839	457
+436	657	355	657
+720	329	457	720
+355	839	657	839
+In the above example, the first column is the input. The remaining columns show the list after successive sorts on increasingly significant digits position. The code for Radix sort assumes that each element in an array A of n elements has d digits, where digit 1 is the lowest-order digit and d is the highest-order digit.
+
+
+
+import java.io.*; 
+import java.util.*; 
+  
+class Radixsort { 
+    static int getMax(int arr[], int n) 
+    { 
+        int mx = arr[0]; 
+        for (int i = 1; i < n; i++) 
+            if (arr[i] > mx) 
+                mx = arr[i]; 
+        return mx; 
+    }  
+    static void countSort(int arr[], int n, int exp) 
+    { 
+        int output[] = new int[n]; // output array 
+        int i; 
+        int count[] = new int[10]; 
+        Arrays.fill(count,0); 
+        for (i = 0; i < n; i++) 
+            count[ (arr[i]/exp)%10 ]++; 
+  
+        for (i = 1; i < 10; i++) 
+            count[i] += count[i - 1]; 
+  
+        for (i = n - 1; i >= 0; i--) 
+        { 
+            output[count[ (arr[i]/exp)%10 ] - 1] = arr[i]; 
+            count[ (arr[i]/exp)%10 ]--; 
+        } 
+        for (i = 0; i < n; i++) 
+            arr[i] = output[i]; 
+    } 
+    static void radixsort(int arr[], int n) 
+    { 
+        int m = getMax(arr, n); 
+        for (int exp = 1; m/exp > 0; exp *= 10) 
+            countSort(arr, n, exp); 
+    } 
+    static void print(int arr[], int n) 
+    { 
+        for (int i=0; i<n; i++) 
+            System.out.print(arr[i]+" "); 
+    } 
+    public static void main (String[] args) 
+    { 
+        int arr[] = {170, 45, 75, 90, 802, 24, 2, 66}; 
+        int n = arr.length; 
+        radixsort(arr, n); 
+        print(arr, n); 
+    } 
+} 
+
+
