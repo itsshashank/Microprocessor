@@ -1,5 +1,5 @@
 data segment
-num db 66
+num db 77
 data ends
 code segment
 ASSUME DS:DATA,CS:CODE
